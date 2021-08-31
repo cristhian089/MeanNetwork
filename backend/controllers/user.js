@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
   let user = new User({
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password,
+    password: hash,
     dbStatus: true,
   });
 
@@ -39,7 +39,22 @@ const listUser = async (req, res) => {
 
 const updateUser = async () => {};
 
-const login = async () => {};
+const login = async (req, res) => {
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send("Wrong email or password");
+
+  if (!user.dbStatus) return res.status(400).send("Wrong email or password");
+
+  let hash = await bcrypt.compare(req.body.password, user.password);
+  if (!hash) return res.status(400).send("Wrong email or password");
+
+  try {
+    let jwtToken = user.generateJWT();
+    return res.status(200).send({ jwtToken });
+  } catch (e) {
+    return res.status(400).send("Login error");
+  }
+};
 
 const deleteUser = async () => {};
 

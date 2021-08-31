@@ -4,7 +4,7 @@ const savePost = async (req, res) => {
   if (!req.body.text) return res.status(400).send("Incomplete data");
 
   let post = new Post({
-    userId: req.user._id,
+    userId: req.body.userId,
     text: req.body.text,
     status: "to-do",
   });
