@@ -1,0 +1,68 @@
+<div class="bgComponent">
+    <div class="accordion_display">
+      <div class="accordion_size">
+        <mat-accordion multi="true" *ngIf="postData.length">
+          <mat-expansion-panel *ngFor="let post of postData" hideToggle="false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>{{ post.text }}</span>
+                <span class="spacer"></span>
+                <button
+                  class="btnDone"
+                  *ngIf="post.status == 'to-do'"
+                  mat-raised-button
+                >
+                  {{ post.status }}
+                </button>
+                <button
+                  class="btnInProgress"
+                  *ngIf="post.status == 'in-progress'"
+                  mat-raised-button
+                >
+                  {{ post.status }}
+                </button>
+                <button
+                  class="btnToDo"
+                  *ngIf="post.status == 'done'"
+                  mat-raised-button
+                >
+                  {{ post.status }}
+                </button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            
+            <mat-panel-description>
+              <img class="card-img-top image_center" src="{{ post.imageUrl}}" />
+            </mat-panel-description>
+            <mat-action-row>
+              <button
+                class="btnSelectTodo"
+                mat-button
+                (click)="updatePost(post, 'to-do')"
+              >
+                to-do
+              </button>
+              <button
+                class="btnSelectInProgress"
+                mat-button
+                (click)="updatePost(post, 'in-progress')"
+              >
+                In-progress
+              </button>
+              <button
+                class="btnSelectDone"
+                mat-button
+                (click)="updatePost(post, 'done')"
+              >
+                done
+              </button>
+              <span class="spacer"></span>
+              <mat-icon color="primary" (click)="deletePost(post)"
+                >delete</mat-icon
+              >
+            </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>

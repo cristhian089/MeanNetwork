@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
+  roleId: { type: mongoose.Schema.ObjectId, ref: "role" },
   Date: { type: Date, default: Date.now },
   dbStatus: Boolean,
 });
@@ -15,6 +16,7 @@ userSchema.methods.generateJWT = function () {
     {
       _id: this._id,
       name: this.name,
+      roleId: this.roleId,
       iat: moment().unix(),
     },
     process.env.SECRECT_KEY_JWT

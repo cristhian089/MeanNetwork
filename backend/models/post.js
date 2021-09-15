@@ -4,6 +4,7 @@ const postSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.ObjectId, ref: "user" },
   text: String,
   status: String,
+  imageUrl: String,
   date: { type: Date, default: Date.now },
 });
 
