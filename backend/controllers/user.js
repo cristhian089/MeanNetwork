@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
 };
 
 const listUser = async (req, res) => {
-  let users = await User.find({ name: new RegExp(req.params["name"], "i") })
+  let users = await User.find({$and:[{ name: new RegExp(req.params["name"], "i")},{dbStatus:true}]})
     .populate("roleId")
     .exec();
 
@@ -50,19 +50,24 @@ const updateUser = async (req, res) => {
     return res.status(400).send("Incomplete data");
 
   let pass = "";
-
+  let role="";
   if (req.body.password) {
     pass = await bcrypt.hash(req.body.password, 10);
   } else {
     let userFind = await User.findOne({ email: req.body.email });
     pass = userFind.password;
   }
+  
+  if(req.body.roleId){
+    let  rolefound = await Role.findOne({ name: req.body.role });
+    role = rolefound._id;
+  }
 
   let user = await User.findByIdAndUpdate(req.body._id, {
     name: req.body.name,
     email: req.body.email,
     password: pass,
-    roleId: req.body.roleId,
+    roleId: role,
   });
 
   if (!user) return res.status(400).send("Error editing user");
