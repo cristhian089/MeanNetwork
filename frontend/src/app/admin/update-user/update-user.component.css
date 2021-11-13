@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .button {
+    width: 100%;
+    background-color: #3d3838;
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  .card {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5%;
+  }
+  
+  .bgComponent {
+    height: 100%;
+    width: 40vw;
+  }
+  
+  mat-card-title {
+    text-align: center;
+  }

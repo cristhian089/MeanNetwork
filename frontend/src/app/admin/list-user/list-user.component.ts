@@ -9,6 +9,10 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import { UpdateUserComponent } from '../update-user/update-user.component';
+
+declare var $: any;
 
 @Component({
   selector: 'app-list-user',
@@ -30,7 +34,8 @@ export class ListUserComponent {
   constructor(
     private _userService: UserService,
     private _router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
     this.userData = {};
     this.dataSource = new MatTableDataSource(this.userData);
@@ -49,27 +54,56 @@ export class ListUserComponent {
         this.openSnackBarError();
       }
     );
+   
   }
 
   deleteUser(user: any) {
-    this._userService.deleteUser(user).subscribe(
-      (res) => {
-        let index = this.userData.indexOf(user);
-        if (index > -1) {
-          this.userData.splice(index, 1);
-          this.dataSource = new MatTableDataSource(this.userData);
-          this.message = 'Delete user';
-          this.openSnackBarSuccesfull();
-        }
-      },
-      (err) => {
-        this.message = err.error;
-        this.openSnackBarError();
-      }
-    );
-  }
 
-  updateUser(user: any) {}
+    let r = confirm("Seguro desea eliminar el usuario!");
+    if (r == true) {
+      this._userService.deleteUser(user).subscribe(
+        (res) => {
+          let index = this.userData.indexOf(user);
+          if (index > -1) {
+            this.userData.splice(index, 1);
+            this.dataSource = new MatTableDataSource(this.userData);
+            this.message = 'Delete user';
+            this.openSnackBarSuccesfull();
+          }
+        },
+        (err) => {
+          this.message = err.error;
+          this.openSnackBarError();
+        }
+      );
+      
+    } else {
+      console.log("no eliminamos");
+      
+    }
+   
+  }
+ 
+
+  updateUser(user: any) {
+    console.log(user);
+   
+      let dialogRef = this.dialog.open(UpdateUserComponent, {
+        data: {id: user._id ,name: user.name, email: user.email, role: user.roleId.name,roleId: user.roleId._id},
+        autoFocus: false,
+      });
+  
+      /*
+      dialogRef.afterOpened().subscribe(res => {
+        console.log(`Dialog result: ${res}`);
+          
+       $( "#update" ).effect( "slide", "scale", 500 );
+        
+      });
+      */
+
+    
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -99,5 +133,6 @@ export class ListUserComponent {
       panelClass: ['style-snackBarFalse'],
     });
   }
+ 
 
 }
